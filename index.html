@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FitAI - Adaptive Fitness Trainer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #151515;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            min-height: 100vh;
+            background: #f4f6fb;
+            padding-bottom: 30px;
+        }
+
+        /* HEADER */
+
+        header {
+            background: #171717;
+            color: white;
+            padding: 22px;
+            border-radius: 0 0 25px 25px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #7c5cff;
+        }
+
+        .subtitle {
+            color: #bdbdbd;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        /* MAIN */
+
+        main {
+            padding: 18px;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eeeaff;
+            color: #654cff;
+            padding: 7px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* CARDS */
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        /* BUTTON */
+
+        button {
+            border: none;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            width: 100%;
+            background: #7058ff;
+            color: white;
+            padding: 14px;
+            border-radius: 13px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .primary-btn:hover {
+            background: #5941e8;
+        }
+
+        /* FORM */
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 13px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .stat small {
+            color: #777;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 25px;
+            margin-top: 6px;
+        }
+
+        /* WORKOUT */
+
+        .exercise {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 14px 0;
+        }
+
+        .exercise:last-child {
+            border-bottom: none;
+        }
+
+        .exercise-name {
+            font-weight: bold;
+        }
+
+        .exercise-info {
+            color: #777;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .tag {
+            background: #eeeaff;
+            color: #654cff;
+            padding: 6px 9px;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+
+        /* ADAPTATION */
+
+        .adaptive-box {
+            border-left: 5px solid #7058ff;
+            background: #f8f6ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 12px;
+        }
+
+        .adaptive-box strong {
+            color: #654cff;
+        }
+
+        /* FEEDBACK */
+
+        .feedback-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .feedback-buttons button {
+            padding: 11px;
+            border: 1px solid #ddd;
+            background: #fafafa;
+            border-radius: 10px;
+        }
+
+        .feedback-buttons button.selected {
+            background: #7058ff;
+            color: white;
+        }
+
+        /* NAVIGATION */
+
+        .nav {
+            display: flex;
+            justify-content: space-around;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-top: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .nav button {
+            background: none;
+            color: #777;
+            font-size: 12px;
+        }
+
+        .nav button.active {
+            color: #7058ff;
+            font-weight: bold;
+        }
+
+        /* SCREENS */
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 600px) {
+            body {
+                background: #ddd;
+            }
+
+            .app {
+                box-shadow: 0 0 30px rgba(0,0,0,0.15);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header>
+        <div class="logo">Fit<span>AI</span></div>
+        <div class="subtitle">
+            Adaptive AI-Based Personal Fitness Trainer
+        </div>
+    </header>
+
+
+    <!-- HOME -->
+
+    <main>
+
+        <section id="home" class="screen active">
+
+            <div class="hero">
+
+                <div class="badge">
+                    ADAPTIVE INTELLIGENCE
+                </div>
+
+                <h1>
+                    Your workout learns from you.
+                </h1>
+
+                <p class="description">
+                    FitAI uses your profile, workout history and
+                    feedback to continuously personalize your
+                    next workout.
+                </p>
+
+                <button class="primary-btn"
+                        onclick="showScreen('profile')">
+                    Start FitAI
+                </button>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+                    <small>Workouts</small>
+                    <strong id="workoutCount">0</strong>
+                </div>
+
+                <div class="stat">
+                    <small>Difficulty</small>
+                    <strong id="difficulty">Baseline</strong>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Adaptive Feedback Loop
+                </h2>
+
+                <p class="description">
+
+                    Profile → Recommendation →
+                    Workout → Feedback →
+                    Adaptation → Next Workout
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+
+        <section id="profile" class="screen">
+
+            <div class="card">
+
+                <h2>Your Profile</h2>
+
+                <label>
+                    Name
+                    <input
+                        id="userName"
+                        type="text"
+                        placeholder="Enter your name">
+                </label>
+
+
+                <label>
+                    Age
+                    <input
+                        id="age"
+                        type="number"
+                        placeholder="20">
+                </label>
+
+
+                <label>
+                    Fitness Level
+
+                    <select id="fitness">
+
+                        <option value="beginner">
+                            Beginner
+                        </option>
+
+                        <option value="intermediate">
+                            Intermediate
+                        </option>
+
+                        <option value="advanced">
+                            Advanced
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <label>
+                    Fitness Goal
+
+                    <select id="goal">
+
+                        <option>
+                            General Fitness
+                        </option>
+
+                        <option>
+                            Strength
+                        </option>
+
+                        <option>
+                            Weight Management
+                        </option>
+
+                        <option>
+                            Endurance
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <label>
+                    Available Time
+
+                    <select id="time">
+
+                        <option value="15">
+                            15 Minutes
+                        </option>
+
+                        <option value="20">
+                            20 Minutes
+                        </option>
+
+                        <option value="30" selected>
+                            30 Minutes
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <label>
+                    Equipment
+
+                    <select id="equipment">
+
+                        <option value="none">
+                            No Equipment
+                        </option>
+
+                        <option value="basic">
+                            Basic Equipment
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="generateWorkout()">
+
+                    Generate Adaptive Workout
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- WORKOUT -->
+
+        <section id="workout" class="screen">
+
+            <div class="card">
+
+                <div class="badge">
+                    PERSONALIZED RECOMMENDATION
+                </div>
+
+                <h2 id="welcome">
+                    Today's Workout
+                </h2>
+
+                <div class="adaptive-box">
+
+                    <strong>
+                        Why did FitAI recommend this?
+                    </strong>
+
+                    <p
+                        id="reason"
+                        class="description">
+
+                        Your workout is generated
+                        from your profile.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>Workout Plan</h2>
+
+                <div id="exerciseList">
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                onclick="showScreen('feedback')">
+
+                Complete Workout
+
+            </button>
+
+        </section>
+
+
+        <!-- FEEDBACK -->
+
+        <section id="feedback" class="screen">
+
+            <div class="card">
+
+                <h2>
+                    Workout Feedback
+                </h2>
+
+                <p class="description">
+
+                    Your feedback becomes the input
+                    for your next recommendation.
+
+                </p>
+
+
+                <label>
+                    How difficult was it?
+                </label>
+
+
+                <div class="feedback-buttons">
+
+                    <button onclick="selectDifficulty(this,'tooEasy')">
+                        Too Easy
+                    </button>
+
+                    <button onclick="selectDifficulty(this,'easy')">
+                        Easy
+                    </button>
+
+                    <button onclick="selectDifficulty(this,'moderate')">
+                        Moderate
+                    </button>
+
+                    <button onclick="selectDifficulty(this,'hard')">
+                        Hard
+                    </button>
+
+                    <button onclick="selectDifficulty(this,'tooHard')">
+                        Too Hard
+                    </button>
+
+                </div>
+
+
+                <label>
+                    Workout Completion (%)
+
+                    <input
+                        id="completion"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="100"
+                        oninput="updateCompletion()">
+
+                    <div
+                        style="text-align:center;margin-top:5px">
+
+                        <strong id="completionValue">
+                            100%
+                        </strong>
+
+                    </div>
+
+                </label>
+
+
+                <label>
+                    Satisfaction
+
+                    <select id="satisfaction">
+
+                        <option value="1">
+                            1 - Very Low
+                        </option>
+
+                        <option value="2">
+                            2 - Low
+                        </option>
+
+                        <option value="3" selected>
+                            3 - Moderate
+                        </option>
+
+                        <option value="4">
+                            4 - Good
+                        </option>
+
+                        <option value="5">
+                            5 - Excellent
+                        </option>
+
+                    </select>
+
+                </label>
+
+
+                <button
+                    class="primary-btn"
+                    onclick="submitFeedback()">
+
+                    Submit Feedback
+
+                </button>
+
+                <p
+                    id="feedbackMessage"
+                    class="success">
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section id="history" class="screen">
+
+            <div class="card">
+
+                <h2>
+                    FitAI History
+                </h2>
+
+                <p class="description">
+                    This shows the data used by the
+                    adaptive recommendation system.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Adaptation State
+                </h2>
+
+                <p>
+                    Current difficulty:
+                    <strong id="historyDifficulty">
+                        Baseline
+                    </strong>
+                </p>
+
+                <p style="margin-top:10px">
+                    Last feedback:
+                    <strong id="lastFeedback">
+                        None
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div
+                class="card"
+                id="historyList">
+
+                No workouts completed yet.
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="nav">
+
+        <button
+            class="active"
+            onclick="showScreen('home')">
+
+            🏠<br>
+            Home
+
+        </button>
+
+        <button
+            onclick="showScreen('workout')">
+
+            💪<br>
+            Workout
+
+        </button>
+
+        <button
+            onclick="showScreen('history')">
+
+            📊<br>
+            History
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+    ==========================================
+    FitAI Adaptive Intelligence Prototype
+    ==========================================
+
+    This prototype uses a simple transparent
+    adaptive policy.
+
+    It is NOT claiming to be a production RL model.
+
+    Feedback:
+
+    Too Easy + high completion
+            ↓
+       Increase difficulty
+
+    Hard / Too Hard / low completion
+            ↓
+       Decrease difficulty
+
+    Moderate
+            ↓
+       Maintain difficulty
+    */
+
+
+    let selectedDifficulty = "moderate";
+
+    let adaptationLevel =
+        Number(localStorage.getItem("fitaiAdaptation")) || 0;
+
+    let history =
+        JSON.parse(
+            localStorage.getItem("fitaiHistory") || "[]"
+        );
+
+
+    /* SCREEN NAVIGATION */
+
+    function showScreen(screenID) {
+
+        document
+            .querySelectorAll(".screen")
+            .forEach(screen => {
+
+                screen.classList.remove("active");
+
+            });
+
+        document
+            .getElementById(screenID)
+            .classList.add("active");
+
+
+        document
+            .querySelectorAll(".nav button")
+            .forEach(button => {
+
+                button.classList.remove("active");
+
+            });
+
+        window.scrollTo(0,0);
+
+        updateHome();
+
+        updateHistory();
+
+    }
+
+
+    /* PROFILE + WORKOUT */
+
+    function generateWorkout() {
+
+        const name =
+            document.getElementById("userName").value
+            || "User";
+
+        const fitness =
+            document.getElementById("fitness").value;
+
+        const goal =
+            document.getElementById("goal").value;
+
+        const time =
+            Number(
+                document.getElementById("time").value
+            );
+
+
+        let multiplier = 1;
+
+
+        if (fitness === "intermediate") {
+
+            multiplier = 1.2;
+
+        }
+
+        if (fitness === "advanced") {
+
+            multiplier = 1.4;
+
+        }
+
+
+        /*
+        Adaptive intelligence:
+
+        Previous feedback modifies
+        workout difficulty.
+        */
+
+        multiplier +=
+            adaptationLevel * 0.1;
+
+
+        let exercises = [
+
+            {
+                name: "Bodyweight Squats",
+                reps: Math.round(12 * multiplier),
+                sets: 2,
+                type: "Legs"
+            },
+
+            {
+                name: "Incline Push-ups",
+                reps: Math.round(8 * multiplier),
+                sets: 2,
+                type: "Upper Body"
+            },
+
+            {
+                name: "Reverse Lunges",
+                reps: Math.round(8 * multiplier),
+                sets: 2,
+                type: "Legs"
+            },
+
+            {
+                name: "Glute Bridge",
+                reps: Math.round(12 * multiplier),
+                sets: 2,
+                type: "Core"
+            },
+
+            {
+                name: "Plank",
+                reps: Math.round(25 * multiplier),
+                sets: 2,
+                type: "Core / Time"
+            }
+
+        ];
+
+
+        if (time <= 15) {
+
+            exercises =
+                exercises.slice(0,3);
+
+        }
+
+        else if (time <= 20) {
+
+            exercises =
+                exercises.slice(0,4);
+
+        }
+
+
+        document.getElementById("welcome")
+            .innerText =
+            name + "'s Adaptive Workout";
+
+
+        let reason =
+            "This is your baseline recommendation based on your profile.";
+
+        if (adaptationLevel > 0) {
+
+            reason =
+            "Your previous workout was manageable, so FitAI increased the difficulty slightly using your feedback.";
+
+        }
+
+        if (adaptationLevel < 0) {
+
+            reason =
+            "Your previous workout was difficult, so FitAI reduced the difficulty to make the next workout more achievable.";
+
+        }
+
+
+        document.getElementById("reason")
+            .innerText = reason;
+
+
+        const list =
+            document.getElementById("exerciseList");
+
+
+        list.innerHTML = "";
+
+
+        exercises.forEach(exercise => {
+
+            const div =
+                document.createElement("div");
+
+            div.className = "exercise";
+
+
+            div.innerHTML = `
+
+                <div>
+
+                    <div class="exercise-name">
+                        ${exercise.name}
+                    </div>
+
+                    <div class="exercise-info">
+
+                        ${exercise.sets}
+                        sets ×
+                        ${exercise.reps}
+                        reps
+
+                    </div>
+
+                </div>
+
+                <div class="tag">
+                    ${exercise.type}
+                </div>
+
+            `;
+
+
+            list.appendChild(div);
+
+        });
+
+
+        showScreen("workout");
+
+    }
+
+
+    /* FEEDBACK */
+
+    function selectDifficulty(button, value) {
+
+        selectedDifficulty = value;
+
+
+        document
+            .querySelectorAll(".feedback-buttons button")
+            .forEach(btn => {
+
+                btn.classList.remove("selected");
+
+            });
+
+
+        button.classList.add("selected");
+
+    }
+
+
+    function updateCompletion() {
+
+        const value =
+            document.getElementById("completion").value;
+
+
+        document.getElementById("completionValue")
+            .innerText = value + "%";
+
+    }
+
+
+    function submitFeedback() {
+
+        const completion =
+            Number(
+                document.getElementById("completion").value
+            );
+
+
+        const satisfaction =
+            Number(
+                document.getElementById("satisfaction").value
+            );
+
+
+        /*
+        =====================================
+        ADAPTIVE DECISION ENGINE
+        =====================================
+
+        This is the core research prototype.
+
+        */
+
+        if (
+            (selectedDifficulty === "tooEasy" ||
+             selectedDifficulty === "easy")
+             &&
+             completion >= 85
+        ) {
+
+            adaptationLevel =
+                Math.min(2, adaptationLevel + 1);
+
+        }
+
+
+        else if (
+
+            selectedDifficulty === "hard" ||
+            selectedDifficulty === "tooHard" ||
+            completion < 70
+
+        ) {
+
+            adaptationLevel =
+                Math.max(-2, adaptationLevel - 1);
+
+        }
+
+
+        else {
+
+            // Moderate feedback:
+            // maintain current difficulty.
+
+            adaptationLevel =
+                adaptationLevel;
+
+        }
+
+
+        const record = {
+
+            date:
+                new Date().toLocaleDateString(),
+
+            difficulty:
+                selectedDifficulty,
+
+            completion:
+                completion,
+
+            satisfaction:
+                satisfaction,
+
+            adaptation:
+                adaptationLevel
+
+        };
+
+
+        history.unshift(record);
+
+
+        localStorage.setItem(
+            "fitaiAdaptation",
+            adaptationLevel
+        );
+
+
+        localStorage.setItem(
+            "fitaiHistory",
+            JSON.stringify(history)
+        );
+
+
+        document.getElementById("feedbackMessage")
+            .innerText =
+            "✓ Feedback saved. FitAI has adapted your next workout.";
+
+
+        updateHome();
+
+        updateHistory();
+
+    }
+
+
+    /* HOME */
+
+    function updateHome() {
+
+        document.getElementById("workoutCount")
+            .innerText =
+            history.length;
+
+
+        let difficulty = "Baseline";
+
+
+        if (adaptationLevel === 1) {
+
+            difficulty =
+                "Slightly Higher";
+
+        }
+
+        if (adaptationLevel === 2) {
+
+            difficulty =
+                "Higher";
+
+        }
+
+        if (adaptationLevel === -1) {
+
+            difficulty =
+                "Slightly Lower";
+
+        }
+
+        if (adaptationLevel === -2) {
+
+            difficulty =
+                "Lower";
+
+        }
+
+
+        document.getElementById("difficulty")
+            .innerText =
+            difficulty;
+
+    }
+
+
+    /* HISTORY */
+
+    function updateHistory() {
+
+        document.getElementById("historyDifficulty")
+            .innerText =
+            adaptationLevel;
+
+
+        if (history.length === 0) {
+
+            document.getElementById("historyList")
+                .innerHTML =
+                "No workouts completed yet.";
+
+            document.getElementById("lastFeedback")
+                .innerText =
+                "None";
+
+            return;
+
+        }
+
+
+        const last =
+            history[0];
+
+
+        document.getElementById("lastFeedback")
+            .innerText =
+            last.difficulty;
+
+
+        const list =
+            document.getElementById("historyList");
+
+
+        list.innerHTML = "";
+
+
+        history.slice(0,5)
+            .forEach((item,index) => {
+
+                const div =
+                    document.createElement("div");
+
+
+                div.style.padding =
+                    "12px 0";
+
+                div.style.borderBottom =
+                    "1px solid #eee";
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        Workout ${history.length-index}
+                    </strong>
+
+                    <br>
+
+                    <small>
+
+                        Date: ${item.date}
+
+                        <br>
+
+                        Difficulty:
+                        ${item.difficulty}
+
+                        <br>
+
+                        Completion:
+                        ${item.completion}%
+
+                        <br>
+
+                        Satisfaction:
+                        ${item.satisfaction}/5
+
+                        <br>
+
+                        Adaptation level:
+                        ${item.adaptation}
+
+                    </small>
+
+                `;
+
+
+                list.appendChild(div);
+
+            });
+
+    }
+
+
+    /* INITIALIZE */
+
+    updateHome();
+
+    updateHistory();
+
+</script>
+
+</body>
+</html>
